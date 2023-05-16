@@ -52,7 +52,7 @@ class HostEventsTransition:
             idx2 = self.EventID_list.index(-1)#終了は-1に戻るとする
             self.transition_EventID[idx1, idx2] += 1
             with open(self.process_text, 'a') as f:
-                print('UserName : {0}, EventID Length : {1}, rank = {2}'.format(i,len(df_each), self.rank), file=f)
+                print('UserName : {0}, Transition Length : {1}, rank = {2}'.format(i,len(df_each), self.rank), file=f)
                 print('処理済み {0}%, rank = {1}'.format(index / len(div_unique) * 100, self.rank), file=f)
             index += 1
         
@@ -72,7 +72,10 @@ class HostEventsTransition:
             transition_EventID_rate = self.transition_EventID.astype(np.float32) #整数型のままだと行和で割ったときエラー
             row_sum = np.sum(transition_EventID_rate, axis=1)
             for i in range(len(transition_EventID_rate)):
-                transition_EventID_rate[i] /= row_sum[i]
+                if row_sum[i] == 0:
+                    transition_EventID_rate[i] = 0
+                else:
+                    transition_EventID_rate[i] /= row_sum[i]
             df_transition_EventID_rate = pd.DataFrame(transition_EventID_rate, index=self.EventID_list, columns=self.EventID_list)
             df_transition_EventID_rate.to_csv('transition_EventID_rate.csv')
             with open(self.process_text, 'a') as f:
