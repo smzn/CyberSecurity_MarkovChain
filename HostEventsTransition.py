@@ -53,7 +53,7 @@ class HostEventsTransition:
             self.transition_EventID[idx1, idx2] += 1
             with open(self.process_text, 'a') as f:
                 print('UserName : {0}, EventID Length : {1}, rank = {2}'.format(i,len(df_each), self.rank), file=f)
-                print('処理済み {0}%, rank = {1}'.format(index / len(div_unique), self.rank), file=f)
+                print('処理済み {0}%, rank = {1}'.format(index / len(div_unique) * 100, self.rank), file=f)
             index += 1
         
         #集約
