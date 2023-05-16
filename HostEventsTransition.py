@@ -6,11 +6,12 @@ import sys
 import psutil
 
 class HostEventsTransition:
-    def __init__(self, data_file, rank, size):
+    def __init__(self, data_file, rank, size, comm):
         self.df = pd.read_csv(data_file)
         print(self.df.head())
         self.rank = rank
         self.size = size
+        self.comm = comm
 
         self.EventID_list = self.df['EventID'].unique().tolist() #推移確率の状態空間
         self.EventID_list.append(-1)
@@ -83,7 +84,7 @@ if __name__ == '__main__':
     size = comm.Get_size()
     start = time.time()
     data_file = sys.argv[1]
-    transition = HostEventsTransition(data_file, rank, size)
+    transition = HostEventsTransition(data_file, rank, size, comm)
     transition.getTransition()
     elapsed_time = time.time() - start
     if rank == 0:
